@@ -1,6 +1,6 @@
 # Plot KN efficiencies
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import sys
@@ -9,9 +9,16 @@ from matplotlib.patches import Rectangle
 from matplotlib import rcParams
 rcParams['font.family'] = 'serif'
 
+import os
+import matplotlib as mpl
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
+import matplotlib.pyplot as plt
+
 event_name = sys.argv[1]
 
-#read output of kn_propoerties.py
+#read output of kn_properties.py
 try:
     df = pd.read_csv('../events/%s/analysis/%s_kn_terse_cut_results_ml.csv' %(event_name, event_name))
     ml = True
@@ -23,15 +30,21 @@ except:
 def get_efficiency_df(cut, df):
     
     cuts, counts = np.unique(df['CUT'], return_counts=True)
+    #print(cuts, counts)
     templates, totals = np.unique(df['SIM_TEMPLATE_INDEX'], return_counts=True)
-    #print(templates, totals)
+    #print(len(templates), templates)#, totals)
+    #simran = range(1,330)
+    #for s,t in zip(simran,templates):
+        #print(s,t)
+
     cut_df = df.iloc[np.where((df['CUT'].values > cut) | (df['CUT'].values == -1))]
     
     results = []
     template_info = []
     for x in sorted(templates):
+        #index = templates.tolist().index(x)
         template_df = cut_df[cut_df['SIM_TEMPLATE_INDEX'] == x]
-        eff = float(template_df.shape[0]) / float(totals[x - 1])
+        eff = float(template_df.shape[0]) / float(totals[x - 1]) #float(totals[index])
         results.append(eff)
         try:
             if len(template_df['PEAKMAG_g'].values[template_df['PEAKMAG_g'].values < 27.5]) > 0:
@@ -74,12 +87,14 @@ def get_efficiency_df(cut, df):
     template_info_cols = ['SNANA_INDEX', 'VK', 'LOGXLAN', 'LOGMASS', 'EFFICIENCY', 'PEAKMAG_g', 'PEAKMAG_r', 'PEAKMAG_i', 'PEAKMAG_z']
     output_df = pd.DataFrame(data=template_info, columns=template_info_cols)
     output_df.to_csv("../events/%s/analysis/%s_cut_%s_kn_efficiencies_table.csv" %(event_name, event_name, cut))
-                            
+    
+    #print(len(results))
     return np.array(results)
 
 #make plot
 def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_last=False):
 
+    templates, totals = np.unique(df['SIM_TEMPLATE_INDEX'], return_counts=True)
     if skip_last:
         fig, axs = plt.subplots(1, len(np.unique(df['LOGXLAN'])) - 1, figsize=(18, 7.5), dpi=120)
     else:
@@ -104,9 +119,11 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
             for logmass_index in logmass_indices:
                 logmass = logmasses[logmass_index]
                 template = df[(df['LOGMASS'] == logmass) & (df['LOGXLAN'] == logxlan) & (df['VK'] == vk)]['SIM_TEMPLATE_INDEX'].values
-                
+                #print(template)
                 if len(template) != 0:
+                    #if template[0]<len(templates):
                     eff = effs[template[0] - 1]
+                    #print(eff)#eff = effs[np.unique(template) - 1]
                 else:
                     eff = 0.0
                     
@@ -208,6 +225,7 @@ cuts = [x for x in np.unique(df['CUT'].values) if int(x) != -1]
 cuts += [10 + np.max(cuts)]
 
 efficiency_dfs = {'cut_%s' %cut: get_efficiency_df(cut, df) for cut in cuts}
+#print(efficiency_dfs[cut_%s])
 
 for cut in cuts:
     outfile_trimmed = "../events/%s/analysis/%s_cut_%s_kn_efficiencies_trimmed" %(event_name, event_name, cut)

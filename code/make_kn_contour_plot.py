@@ -1,5 +1,12 @@
 # Inputs for kn contour plotting functions
 
+import os
+import matplotlib as mpl
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
+import matplotlib.pyplot as plt
+
 import sys
 
 import kn_contour_plot_functions as funcs
@@ -10,8 +17,9 @@ outfile = '../events/%s/analysis/kn_contour.pdf' %event_name
 # Event specific info
 
 if event_name == 'GW190814_1001' or event_name == 'GW190814_gold':
-    cuts = [200019]
+    #cuts = [200019]
     #cuts = [1, 18]
+    cuts = [1, 11]
     filenames = ['../events/%s/analysis/%s_cut_%i_kn_efficiencies_table.csv' %(event_name, event_name, cut) for cut in cuts] 
     
     #backgrounds = [396.5 + 174.0, 0.001]

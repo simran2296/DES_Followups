@@ -41,6 +41,15 @@ if len(undefined_cuts) != 0:
 
 #load light curve dictionary
 data_dict = np.load('../events/%s/sims_and_data/%s_PYTHON/%s.npy' %(event_name, fits_dir_prefix, fits_dir_prefix)).item()
+# change the 
+#data_dict = data_dict.rename(columns={'BAND': 'FLT'})
+#dfnew = df.rename(columns={'popu': 'population'})
+#ini_dict['akash'] = ini_dict.pop('akshat')
+#data_dict['FLT'] = data_dict.pop('BAND')
+#data_dict['lightcurve']['FLT'] = data_dict.pop(['lightcurve']['BAND'])
+#del data_dict['BAND']
+#data_dict['lightcurve'].rename(columns={"BAND": "FLT"})#, "B": "c"})
+#data_dict['1']['lightcurve'].rename(columns={"BAND": "FLT"})
 
 #place cuts in order, save snids passing each cut in list files
 # do this by programatically building up a code block
@@ -59,9 +68,12 @@ cut_results = {}
 for snid, info in data_dict.iteritems():
     
     lc = info['lightcurve']
+    #print(info)
     md = info['metadata']
+    #exec(compiled_cut_code_block)
+    lc['FLT'] = lc['BAND']
+    #print(lc)
     exec(compiled_cut_code_block)
-    
     #if not cut, set cut_result to -1. if cut, set cut_result to cut number 
     if cut_by == cut_df.shape[0]:
         cut_results[snid] = {'cut': -1, 'lightcurve': lc, 'metadata': md}

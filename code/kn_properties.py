@@ -16,7 +16,9 @@ info_df = pd.read_csv('../templates/KN_SED.INFO', delim_whitespace=True, skiprow
 
 print("Loading cut results")
 #read cut results
-kn_results = np.load('../events/%s/cut_results/%s_DESGW_%s_KN_cut_results.npy' %(event_name, username, event_name)).item()
+kn_results = np.load('../events/%s/cut_results/%s_DESGW_%s_KN-tr_cut_results.npy' %(event_name, username, event_name), allow_pickle=True, encoding='latin1').item()
+#kn_results = np.load('../events/%s/cut_results/LightCurvesReal_cut_results.npy' %(event_name), allow_pickle=True, encoding='latin1').item()
+
 
 total = len(list(kn_results.keys()))
 counter = 0.0
@@ -25,13 +27,15 @@ counter = 0.0
 ## build a one time csv to make plot and export
 data = []
 columns = ['SNID', 'SIM_TEMPLATE_INDEX', 'CUT', 'PEAKMAG_g', 'PEAKMAG_r', 'PEAKMAG_i', 'PEAKMAG_z']
-for snid, info in kn_results.iteritems():
+for snid, info in kn_results.items():
 
     counter += 1.0
     if int(counter) % 100 == 0:
         progress = counter / total * 100.0
         sys.stdout.write('\rProgress: %.2f %%   ' %progress)
         sys.stdout.flush()
+
+    info['lightcurve']['FLT'] = info['lightcurve']['BAND']
 
     g_data = [float(x) for x in info['lightcurve'][info['lightcurve']['FLT'] == 'g']['FLUXCAL'].values]
     r_data = [float(x) for x in info['lightcurve'][info['lightcurve']['FLT'] == 'r']['FLUXCAL'].values]

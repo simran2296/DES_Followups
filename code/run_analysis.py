@@ -23,6 +23,7 @@ sys.exit()
 # extract light curves from data
 os.system('python extract_lc_points.py %s data' %event_name)
 
+#sys.exit()
 # extract light cuvres from sims
 os.system('python extract_lc_points.py %s sims' %event_name)
 

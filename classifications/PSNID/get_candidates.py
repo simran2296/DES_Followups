@@ -3,8 +3,8 @@
 import os
 import sys
 
-if os.path.exists('LightCurvesReal/'):
-    os.system('rm -rf LightCurvesReal')
+#if os.path.exists('LightCurvesReal/'):
+#    os.system('rm -rf LightCurvesReal')
 os.system('mkdir LightCurvesReal')
 
 event_name = sys.argv[1]
@@ -57,15 +57,19 @@ os.system('touch LightCurvesReal.IGNORE')
 os.system('touch LightCurvesReal.README')
 os.chdir('..')
 
-
 #run snana text to fits
 dat_path = 'LightCurvesReal'
-os.system('snana.exe NOFILE PRIVATE_DATA_PATH %s VERSION_PHOTOMETRY %s VERSION_REFORMAT_FITS %s' %(dat_path, dat_path, dat_path))
-
+out_dir = 'LightCurvesReal_out'
+#os.system('rm -rf LightCurvesReal')
+os.system('snana.exe NOFILE PRIVATE_DATA_PATH %s VERSION_PHOTOMETRY %s VERSION_REFORMAT_FITS %s' %(dat_path, dat_path, out_dir))
+#os.system('rm -rf LightCurvesReal')                                                                                                                                 
 #clean up files for PSNID
 os.system('rm LightCurvesReal/*')
-os.system('mv LightCurvesReal_HEAD.FITS LightCurvesReal')
-os.system('mv LightCurvesReal.IGNORE LightCurvesReal')
-os.system('mv LightCurvesReal.LIST LightCurvesReal')
-os.system('mv LightCurvesReal_PHOT.FITS LightCurvesReal')
-os.system('mv LightCurvesReal.README LightCurvesReal')
+os.chdir('LightCurvesReal_out')
+os.system('gzip -d LightCurvesReal_out_HEAD.FITS.gz')
+os.system('gzip -d LightCurvesReal_out_PHOT.FITS.gz')
+os.system('mv LightCurvesReal_out_HEAD.FITS LightCurvesReal')
+os.system('mv LightCurvesReal_out.IGNORE LightCurvesReal')
+os.system('mv LightCurvesReal_out.LIST LightCurvesReal')
+os.system('mv LightCurvesReal_out_PHOT.FITS LightCurvesReal')
+os.system('mv LightCurvesReal_out.README LightCurvesReal')
