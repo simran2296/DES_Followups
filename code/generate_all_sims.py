@@ -182,7 +182,7 @@ for obj in obj_to_simulate:
         args.append(obj)
         #os.chdir('sim_gen')
         #os.system('~/SNANA/bin/snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
-        os.system('~/SNANA-11_04o/bin/snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
+        os.system('~/SNANA-11_05/bin/snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
 
 os.chdir('..')
 

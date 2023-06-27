@@ -47,7 +47,7 @@ os.chdir('..')
 dat_path = 'LightCurvesReal'
 dat_path_but_cooler = dat_path + '_1'
 
-os.system('~/SNANA-11_04o/bin/snana.exe NOFILE PRIVATE_DATA_PATH %s VERSION_PHOTOMETRY %s VERSION_REFORMAT_FITS %s > %s/convert_dat_to_fits.log' %(dat_path, dat_path, dat_path_but_cooler, log_path))
+os.system('~/SNANA-11_05/bin/snana.exe NOFILE PRIVATE_DATA_PATH %s VERSION_PHOTOMETRY %s VERSION_REFORMAT_FITS %s > %s/convert_dat_to_fits.log' %(dat_path, dat_path, dat_path_but_cooler, log_path))
 
 os.system('rm -r LightCurvesReal')
 os.system('mkdir FITS_LightCurvesReal')

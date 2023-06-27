@@ -16,10 +16,11 @@ NGEN_LC:  10
 # Don't need to change anything after this point  (I sure hope)
 #--------------------------------------------------------------------
 
-SIMLIB_FILE:  sim_gen/SIMLIB.txt
+#SIMLIB_FILE:  sim_gen/SIMLIB.txt
+SIMLIB_FILE:  SIMLIB.txt
 
 #FLUXERRMODEL_FILE:        sim_gen/SDSS_fluxErrModel.DAT
-#HOSTLIB_MSKOPT:  256 
+HOSTLIB_MSKOPT:  256 
 
 # 26.78 sq deg -> 61 chips, .263''/pixel, mask 20 pixel border 
 
@@ -31,7 +32,7 @@ GENMODEL:    SALT2.Guy10_UV2IR
 GENMAG_SMEAR_MODELNAME:  G10
 
 GENFILTERS:  griz                 # RM-set to gri from griz to match obs?
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits #DES/kcor_DES_grizY.fits
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #DES/kcor_DES_grizY.fits
 
 GENSIGMA_SEARCH_PEAKMJD:  0.1     # sigma-smearing for  SEARCH_PEAKMJD (days)
 
@@ -47,8 +48,11 @@ SMEARFLAG_ZEROPT:  1  # smear zero-point with zptsig
 
 NEWMJD_DIF:  0.7
 APPLY_SEARCHEFF_OPT:  0
-SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
-SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
+#SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
+#SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
+SEARCHEFF_PIPELINE_FILE:  MYSEARCH_EFF.DAT
+SEARCHEFF_PIPELINE_LOGIC_FILE:  SEARCHEFF_PIPELINE_LOGIC.DAT
+
 
 APPLY_CUTWIN_OPT: 1   #PSNID dies if you turn this off, fun fact
 CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3
@@ -74,7 +78,7 @@ SIMGEN_DUMPALL:  37
 # ======
 
 # Set a fixed tolerance for hostgal redshift SN redshift difference
-#HOSTLIB_DZTOL: 0.01 0 0
+HOSTLIB_DZTOL: 0.01 0 0
 
 #FORMAT_MASK:  32  # 2=terse  8=BLIND  16=CIDRAN; 32=FITS
 

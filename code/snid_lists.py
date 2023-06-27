@@ -18,6 +18,7 @@ def GW19084_1001_not_artifact():
 
 def GW19084_1001_not_artifact_strict():
     df = pd.read_csv('../events/GW190814_1001/snid_lists/GW190814_vetting.csv', comment='#')
+    #df = pd.read_csv('../events/GW190814_1001_rerun_v1/snid_lists/GW190814_vetting.csv', comment='#')
     snids = np.array(df['SNID'], dtype=int)
     bad_sub = np.array(df['Bad Sub'].values, dtype=int)
     masked = np.array(df['Overmasked'].values, dtype=int)
