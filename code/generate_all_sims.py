@@ -175,11 +175,16 @@ obj_logfile_map = {'AGN': 'sim_agn.log',
 for k in obj_logfile_map.keys():
     obj_logfile_map[k +'-tr'] = 'sim_tr_' + obj_logfile_map[k].split('_')[-1]
 
+os.chdir('sim_gen')
 args = []
 for obj in obj_to_simulate:
-    if not os.path.exists('sims_and_data/%s_DESGW_%s_%s_FITS' %(username, event_name, obj)):
+    if not os.path.exists('../sims_and_data/%s_DESGW_%s_%s_FITS' %(username, event_name, obj)):
         args.append(obj)
-        os.system('snlc_sim.exe sim_gen/%s > logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
+        #os.chdir('sim_gen')
+        #os.system('~/SNANA/bin/snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
+        os.system('~/SNANA-11_04o/bin/snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
+
+os.chdir('..')
 
 #only do the following if there are running sims
 if len(args) != 0:
