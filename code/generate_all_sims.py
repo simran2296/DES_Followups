@@ -181,8 +181,8 @@ for obj in obj_to_simulate:
     if not os.path.exists('../sims_and_data/%s_DESGW_%s_%s_FITS' %(username, event_name, obj)):
         args.append(obj)
         #os.chdir('sim_gen')
-        #os.system('~/SNANA/bin/snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
-        os.system('~/SNANA-11_05/bin/snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
+        #os.system('snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
+        os.system('~/SNANA-11_05e/bin/snlc_sim.exe %s > ../logs/%s &' %(obj_simfile_map[obj], obj_logfile_map[obj]))
 
 os.chdir('..')
 
@@ -200,6 +200,7 @@ if len(args) != 0:
     os.chdir('../events/%s' %event_name)
     for obj in args:
         os.system('mv ' + sim_dir_prefix + '%s  sims_and_data/%s_DESGW_%s_%s_FITS' %(obj, username, event_name, obj))
+        #os.system('rm -rf ' + sim_dir_prefix + '%s' %(obj))
 
 else:
     print("Previous sims found, moving on")

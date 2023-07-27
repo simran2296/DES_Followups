@@ -254,6 +254,7 @@ while running:
             ia_running = False ## it should finish up in time where this is okay
             ia_progress = 'Finishing'
         elif ia_phase2 or last_line.find('Finished writing') != -1:
+            #print("Now tracking progress")
             ia_phase1 = False
             ia_phase2 = True
             info = [x for x in last_line.split(' ') if x != '' and x != '\t' and x != '\n']
@@ -262,6 +263,7 @@ while running:
             ia_progress = '%.2f %%' % (float(completed) / float(total) * 100.0)
         elif ia_phase1 == True:
             ia_progress = 'Initializing'
+            #print("In phase 1")
         else:
             print("\nNot sure how we got here, last status was:")
             print("\tPhase1: %i, Phase2: %i, Phase3: %i" %(int(ia_phase1), int(ia_phase2), int(ia_phase3)))

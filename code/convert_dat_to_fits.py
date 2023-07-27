@@ -13,6 +13,8 @@ fits_path = '../events/%s/sims_and_data/LightCurvesReal_FITS' % event_name
 if os.path.exists(fits_path):
     os.system('rm -r %s' %fits_path)
 
+
+#os.system('pwd')
 os.system('cp -r ../events/%s/sims_and_data/LightCurvesReal .' %event_name)
 
 log_path = '../events/%s/logs' %event_name
@@ -21,11 +23,12 @@ if not os.path.exists(log_path):
 
 
 #check for list, readme, and ignore files
-os.system('rm LightCurvesReal/*.IGNORE LightCurvesReal/*.README LightCurvesReal/*.LIST')
+os.system('rm -rf LightCurvesReal/*.IGNORE LightCurvesReal/*.README LightCurvesReal/*.LIST')
 os.chdir('LightCurvesReal')
 os.system('ls -1 *.dat > LightCurvesReal.LIST')
 os.system('touch LightCurvesReal.IGNORE')
 os.system('touch LightCurvesReal.README')
+
 readme = open("LightCurvesReal.README",'w')
 docana_lines = '''DOCUMENTATION:
     PURPOSE:  BBH SNANA simulation
@@ -39,17 +42,27 @@ docana_lines = '''DOCUMENTATION:
 DOCUMENTATION_END:
 
 '''
+
 readme.write(docana_lines)
 readme.close()
 
 os.chdir('..')
+#os.system('pwd')
+#os.chdir('sims_and_data')
 
 dat_path = 'LightCurvesReal'
 dat_path_but_cooler = dat_path + '_1'
 
-os.system('~/SNANA-11_05/bin/snana.exe NOFILE PRIVATE_DATA_PATH %s VERSION_PHOTOMETRY %s VERSION_REFORMAT_FITS %s > %s/convert_dat_to_fits.log' %(dat_path, dat_path, dat_path_but_cooler, log_path))
+#log_path1 = '../../logs/'
 
-os.system('rm -r LightCurvesReal')
+#os.system('python ../../../code/SNANA_command.py')
+
+#if not os.path.exists('../LightCurvesReal_1/'):
+os.system('~/SNANA-11_05e/bin/snana.exe NOFILE PRIVATE_DATA_PATH %s VERSION_PHOTOMETRY %s VERSION_REFORMAT_FITS %s > %s/convert_dat_to_fits.log' %(dat_path, dat_path, dat_path_but_cooler, log_path))
+
+#os.system('snana.exe NOFILE PRIVATE_DATA_PATH %s VERSION_PHOTOMETRY %s VERSION_REFORMAT_FITS %s > %s/convert_dat_to_fits.log' %(dat_path, dat_path, dat_path_but_cooler, log_path))
+
+os.system('rm -rf LightCurvesReal')
 os.system('mkdir FITS_LightCurvesReal')
 os.system('mv LightCurvesReal_1/* FITS_LightCurvesReal')
 os.system('mv FITS_LightCurvesReal/LightCurvesReal_1.IGNORE FITS_LightCurvesReal/LightCurvesReal.IGNORE')
@@ -63,4 +76,5 @@ os.system('gunzip FITS_LightCurvesReal/LightCurvesReal_1_PHOT.FITS.gz')
 os.system('mv FITS_LightCurvesReal/LightCurvesReal_1_HEAD.FITS FITS_LightCurvesReal/LightCurvesReal_HEAD.FITS')
 os.system('mv FITS_LightCurvesReal/LightCurvesReal_1_PHOT.FITS FITS_LightCurvesReal/LightCurvesReal_PHOT.FITS')
 os.system('mv FITS_LightCurvesReal ../events/%s/sims_and_data/LightCurvesReal_FITS' %event_name)
-os.system('rm -r LightCurvesReal_1')
+os.system('rm -rf LightCurvesReal_1')
+

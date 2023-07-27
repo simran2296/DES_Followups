@@ -60,3 +60,4 @@ if sims_data_both in ['data', 'both']:
         os.system('python get_cut_results.py %s %s' %(event_name, fits_dir_prefix))
     else:
         print("Cut results already exist, skipping cuts on DATA")
+

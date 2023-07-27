@@ -49,6 +49,10 @@ if not os.path.exists('../events/%s/sims_and_data/LightCurvesReal' %event_name):
 sys.stdout.write("\rCopying dat files:  Done!               \n")
 sys.stdout.flush()
 
+os.chdir('../events/%s/sims_and_data/LightCurvesReal/' %event_name)
+os.system('chmod +rwx *.dat')
+os.chdir('../../../../code')
+
 #os.system("python removeNITE.py %s" %(event_name))
 
 
