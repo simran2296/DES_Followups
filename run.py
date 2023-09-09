@@ -160,3 +160,9 @@ if run_psnid:
     os.system('python run_PSNID.py %s %i %s %s' %(event_name, classify_cutoff, signal, background))
     os.system('python featurize.py %s %s %s' %(event_name, signal, background))
     os.system('python classify.py %s %s %s' %(event_name, signal, background))
+
+#create parameter plots
+os.system('python run_analysis.py %s' %(event_name))
+
+#create contour plot
+os.system('python make_kn_contour_plot.py %s' %(event_name))

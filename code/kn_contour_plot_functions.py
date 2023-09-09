@@ -269,6 +269,7 @@ def make_plot_full(all_info, plot_contour_list=[True], hist_param_list=[{}], out
     
     if outfile != '':
         fig.savefig(outfile)
+        fig.savefig(outfile + '.jpg', rasterized=True)
     #fig.show()
     
     return
