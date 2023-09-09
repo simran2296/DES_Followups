@@ -16,21 +16,21 @@ outfile = '../events/%s/analysis/kn_contour.pdf' %event_name
 
 # Event specific info
 
-if event_name == 'GW190814_1001' or event_name == 'GW190814_gold':
-    #cuts = [200019]
+#if event_name == 'GW190814_1001' or event_name == 'GW190814_gold':
+#cuts = [200019]
     #cuts = [1, 18]
-    cuts = [1, 11]
-    filenames = ['../events/%s/analysis/%s_cut_%i_kn_efficiencies_table.csv' %(event_name, event_name, cut) for cut in cuts] 
+cuts = [1, 18]
+filenames = ['../events/%s/analysis/%s_cut_%i_kn_efficiencies_table.csv' %(event_name, event_name, cut) for cut in cuts] 
     
     #backgrounds = [396.5 + 174.0, 0.001]
-    backgrounds = [0.01] 
-    lam = 1.0
-    f = 0.99
+backgrounds = [0.01] 
+lam = 1.0
+f = 0.99
 
-    #sigma_list = [{'20': 6, '21': 6, '12': 6}, {'20': 8, '21': 8, '12': 12}]
-    sigma_list = [{'20': 40, '21': 22, '12': 30}]
-    plot_contour_list = [True]
-    hist_param_list = [{'color': 'black',
+#sigma_list = [{'20': 6, '21': 6, '12': 6}, {'20': 8, '21': 8, '12': 12}]
+sigma_list = [{'20': 40, '21': 22, '12': 30}]
+plot_contour_list = [True]
+hist_param_list = [{'color': 'black',
                         'lw': 2,
                         'linestyle': 'solid'}]#,
 #                       {'color': 'black',

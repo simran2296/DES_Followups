@@ -93,6 +93,9 @@ def get_efficiency_df(cut, df):
 
 #make plot
 def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_last=False):
+    
+    eff_list_1 = []
+    eff_list_2 = []
 
     templates, totals = np.unique(df['SIM_TEMPLATE_INDEX'], return_counts=True)
     if skip_last:
@@ -141,6 +144,12 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
                     else:
                         axs[counter].text(vk_index, logmass_index, '%.2f' %eff, ha="center", va="center", color="black", fontsize=13)
 
+                if eff > 0.9:
+                    eff_list_1.append(eff)
+                    #print(eff)
+
+                if eff > 0.75:
+                    eff_list_2.append(eff)
     
         axs[counter].imshow(im_arr, vmin=0, vmax=1, cmap='viridis', origin='lower')
         
@@ -200,6 +209,14 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
     
     if outfile is not None:
         plt.savefig(outfile + '.pdf', rasterized=True)
+        plt.savefig(outfile + '.jpg', rasterized=True)
+
+
+    good_eff_1 = len(eff_list_1)
+    good_eff_2 = len(eff_list_2)
+    #frac_eff = good_eff/329
+    print('Fraction of Templates with efficiency greater than 90% = ', good_eff_1)    
+    print('Fraction of Templates with efficiency greater than 75% = ', good_eff_2)
 
 
 # Sanity Checks
