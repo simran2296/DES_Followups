@@ -32,10 +32,8 @@ def get_efficiency_df(cut, df):
     cuts, counts = np.unique(df['CUT'], return_counts=True)
     print(cuts, counts)
     templates, totals = np.unique(df['SIM_TEMPLATE_INDEX'], return_counts=True)
-    #print(len(templates), templates)#, totals)
-    #simran = range(1,330)
-    #for s,t in zip(simran,templates):
-        print(s,t)
+    print(len(templates), templates, totals)
+    
 
     cut_df = df.iloc[np.where((df['CUT'].values > cut) | (df['CUT'].values == -1))]
     
@@ -167,11 +165,11 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
         
         #axs[counter].set_xlabel('EJECTA VELOCITY\nLOGXLAN = %.0f' %logxlans[counter], fontsize=20)
         if skip_last:
-            axs[counter, 0].set_xlabel('$fall_index$ [$mags/day$]', fontsize=20)
-            axs[counter, 0].set_title('$brightness_param$ = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=20)
+            axs[counter, 0].set_xlabel('fall_index [$mags/day$]', fontsize=20)
+            axs[counter, 0].set_title('brightness_param = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=20)
         else:
-            axs[counter, 0].set_xlabel('$fall_index$ [$mags/day$]', fontsize=16)
-            axs[counter, 0].set_title('$brightness_param$ = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=16)
+            axs[counter, 0].set_xlabel('fall_index [$mags/day$]', fontsize=16)
+            axs[counter, 0].set_title('brightness_param = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=16)
     
         counter += 1
         
@@ -180,10 +178,10 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
                 break
     
     if skip_last:
-        axs[0,0].set_ylabel("$rise_index$ [$days$]", fontsize=20)
+        axs[0,0].set_ylabel("rise_index [$days$]", fontsize=20)
         axs[0,0].set_yticklabels(['%.3f' %10**x for x in rise_indices], fontsize=20)
     else:
-        axs[0,0].set_ylabel("$rise_index$ [$days$]", fontsize=16)
+        axs[0,0].set_ylabel("rise_index [$days$]", fontsize=16)
         axs[0,0].set_yticklabels(['%.3f' %10**x for x in rise_indices], fontsize=16)
     axs[0,0].set_yticks(np.arange(len(rise_indices)))
     
