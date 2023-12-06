@@ -80,4 +80,4 @@ for res, label  in zip(results, labels):
                                      ])
 
     df = pd.DataFrame(data=out_data, columns=['SNID', 'MJD', 'FLT', 'FLUXCAL', 'FLUXCALERR', 'REDSHIFT', 'MODEL', 'TEMPLATE'])
-    df.to_csv('../events/%s/analysis/%s_lc_data.csv' %(event_name, label)) 
+    df.to_csv('../events/%s/kn_analysis/%s_lc_data.csv' %(event_name, label)) 
