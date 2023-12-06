@@ -9,25 +9,24 @@ event_name = sys.argv[1]
 username = getpass.getuser()
 
 #read kn model info
-info_df = pd.read_csv('../templates/KN_SED.INFO', delim_whitespace=True, skiprows=8, 
-                      names=['PARNAMES:', 'SED_FILE', 'SIM_TEMPLATE_INDEX', 'VK', 'LOGXLAN', 'LOGMASS'])
+info_df = pd.read_csv('../templates/BBH_SED2.INFO', delim_whitespace=True, skiprows=12, 
+                      names=['PARNAMES:', 'SED_FILE', 'SIM_TEMPLATE_INDEX', 'rise_index', 'fall_index', 'brightness_param'])
 
 
 
 print("Loading cut results")
 #read cut results
-kn_results = np.load('../events/%s/cut_results/%s_DESGW_%s_KN-tr_cut_results.npy' %(event_name, username, event_name), allow_pickle=True, encoding='latin1').item()
-#kn_results = np.load('../events/%s/cut_results/LightCurvesReal_cut_results.npy' %(event_name), allow_pickle=True, encoding='latin1').item()
+bbh_results = np.load('../events/%s/cut_results/%s_DESGW_%s_BBH-tr_cut_results.npy' %(event_name, username, event_name), allow_pickle=True, encoding='latin1').item()
 
 
-total = len(list(kn_results.keys()))
+total = len(list(bbh_results.keys()))
 counter = 0.0
 
 
 ## build a one time csv to make plot and export
 data = []
 columns = ['SNID', 'SIM_TEMPLATE_INDEX', 'CUT', 'PEAKMAG_g', 'PEAKMAG_r', 'PEAKMAG_i', 'PEAKMAG_z']
-for snid, info in kn_results.items():
+for snid, info in bbh_results.items():
 
     counter += 1.0
     if int(counter) % 100 == 0:
@@ -80,7 +79,7 @@ for snid, info in kn_results.items():
 df = pd.DataFrame(data=data, columns=columns)
 
 df = df.merge(info_df, on='SIM_TEMPLATE_INDEX')
-df.to_csv('../events/%s/kn_analysis/%s_kn_terse_cut_results.csv' %(event_name, event_name))
+df.to_csv('../events/%s/BBH_analysis/%s_BBH_terse_cut_results.csv' %(event_name, event_name))
 
 print("\nDone!")
 

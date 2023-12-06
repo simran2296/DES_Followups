@@ -8,15 +8,15 @@ import sys
 event_name = sys.argv[1]
 
 # make analysis directory if necessary
-if not os.path.exists("../events/%s/analysis/" %event_name):
-    os.mkdir("../events/%s/analysis/" %event_name)
+if not os.path.exists("../events/%s/BBH_analysis/" %event_name):
+    os.mkdir("../events/%s/BBH_analysis/" %event_name)
 
 
-# merge KN model properties with cut results and peak magnitudes
-os.system("python kn_properties.py %s" %event_name)
+# merge BBH model properties with cut results and peak magnitudes
+os.system("python BBH_properties.py %s" %event_name)
 
-# make KN model efficiency plots
-os.system("python kn_template_efficiencies.py %s" %event_name)
+# make BBH model efficiency plots
+os.system("python BBH_template_efficiencies.py %s" %event_name)
 
 sys.exit()
 

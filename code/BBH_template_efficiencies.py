@@ -18,24 +18,24 @@ import matplotlib.pyplot as plt
 
 event_name = sys.argv[1]
 
-#read output of kn_properties.py
+#read output of BBH_properties.py
 try:
-    df = pd.read_csv('../events/%s/kn_analysis/%s_kn_terse_cut_results_ml.csv' %(event_name, event_name))
+    df = pd.read_csv('../events/%s/BBH_analysis/%s_BBH_terse_cut_results_ml.csv' %(event_name, event_name))
     ml = True
 except:
-    df = pd.read_csv('../events/%s/kn_analysis/%s_kn_terse_cut_results.csv' %(event_name, event_name))
+    df = pd.read_csv('../events/%s/BBH_analysis/%s_BBH_terse_cut_results.csv' %(event_name, event_name))
     ml = False
 
 #parse df to determine template efficiencies for each cut
 def get_efficiency_df(cut, df):
     
     cuts, counts = np.unique(df['CUT'], return_counts=True)
-    #print(cuts, counts)
+    print(cuts, counts)
     templates, totals = np.unique(df['SIM_TEMPLATE_INDEX'], return_counts=True)
     #print(len(templates), templates)#, totals)
     #simran = range(1,330)
     #for s,t in zip(simran,templates):
-        #print(s,t)
+        print(s,t)
 
     cut_df = df.iloc[np.where((df['CUT'].values > cut) | (df['CUT'].values == -1))]
     
@@ -65,9 +65,9 @@ def get_efficiency_df(cut, df):
                 z_mean = 99.0
 
             template_info.append([x,
-                                  template_df['VK'].values[0],
-                                  template_df['LOGXLAN'].values[0],
-                                  template_df['LOGMASS'].values[0],
+                                  template_df['rise_index'].values[0],
+                                  template_df['fall_index'].values[0],
+                                  template_df['brightness_param'].values[0],
                                   eff,
                                   g_mean,
                                   r_mean,
@@ -75,18 +75,18 @@ def get_efficiency_df(cut, df):
                                   z_mean])
         except:
             template_info.append([x, 
-                                  df['VK'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
-                                  df['LOGXLAN'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
-                                  df['LOGMASS'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
+                                  df['rise_index'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
+                                  df['fall_index'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
+                                  df['brightness_param'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
                                   0.0, 
                                   99.0,
                                   99.0,
                                   99.0,
                                   99.0])
 
-    template_info_cols = ['SNANA_INDEX', 'VK', 'LOGXLAN', 'LOGMASS', 'EFFICIENCY', 'PEAKMAG_g', 'PEAKMAG_r', 'PEAKMAG_i', 'PEAKMAG_z']
+    template_info_cols = ['SNANA_INDEX', 'rise_index', 'fall_index', 'brightness_param', 'EFFICIENCY', 'PEAKMAG_g', 'PEAKMAG_r', 'PEAKMAG_i', 'PEAKMAG_z']
     output_df = pd.DataFrame(data=template_info, columns=template_info_cols)
-    output_df.to_csv("../events/%s/kn_analysis/%s_cut_%s_kn_efficiencies_table.csv" %(event_name, event_name, cut))
+    output_df.to_csv("../events/%s/BBH_analysis/%s_cut_%s_BBH_efficiencies_table.csv" %(event_name, event_name, cut))
     
     #print(len(results))
     return np.array(results)
@@ -99,29 +99,32 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
 
     templates, totals = np.unique(df['SIM_TEMPLATE_INDEX'], return_counts=True)
     if skip_last:
-        fig, axs = plt.subplots(1, len(np.unique(df['LOGXLAN'])) - 1, figsize=(18, 7.5), dpi=120)
+        fig, axs = plt.subplots(1, len(np.unique(df['brightness_param'])) - 1, figsize=(18, 7.5), dpi=120, squeeze=False)
     else:
-        fig, axs = plt.subplots(1, len(np.unique(df['LOGXLAN'])), figsize=(18, 7.5), dpi=120)
+        fig, axs = plt.subplots(1, len(np.unique(df['brightness_param'])), figsize=(18, 7.5), dpi=120, squeeze=False)
     
     if title is not None:
         fig.suptitle(title, fontsize=28)
     
-    logmasses, logmasses_counts = np.unique(df['LOGMASS'], return_counts=True)
-    logxlans, logxlans_counts = np.unique(df['LOGXLAN'], return_counts=True)
-    vks, vk_counts = np.unique(df['VK'], return_counts=True)
-    
+    #logmasses, logmasses_counts = np.unique(df['LOGM'], return_counts=True)
+    #logxlans, logxlans_counts = np.unique(df['LOGXLAN'], return_counts=True)
+    #vks, vk_counts = np.unique(df['VK'], return_counts=True)
+    rise_indices, rise_indices_counts = np.unique(df['rise_index'], return_counts=True)
+    fall_indices, fall_indices_counts = np.unique(df['fall_index'], return_counts=True)
+    brightness_params, brightness_params_counts = np.unique(df['brightness_param'], return_counts=True)
+
     counter = 0
-    for logxlan in np.unique(df['LOGXLAN']):
+    for param in np.unique(df['brightness_param']):
         
-        im_arr = np.ones((len(np.unique(df['LOGMASS'])), len(np.unique(df['VK']))))
+        im_arr = np.ones((len(np.unique(df['rise_index'])), len(np.unique(df['fall_index']))))
         #im_arr = np.ones((len(np.unique(df['VK'])), len(np.unique(df['LOGMASS']))))
-        vk_indices = np.arange(len(np.unique(df['VK'])))
-        logmass_indices = np.arange(len(np.unique(df['LOGMASS'])))
-        for vk_index in vk_indices:
-            vk = vks[vk_index]
-            for logmass_index in logmass_indices:
-                logmass = logmasses[logmass_index]
-                template = df[(df['LOGMASS'] == logmass) & (df['LOGXLAN'] == logxlan) & (df['VK'] == vk)]['SIM_TEMPLATE_INDEX'].values
+        fall_indices_1 = np.arange(len(np.unique(df['fall_index'])))
+        rise_indices_1 = np.arange(len(np.unique(df['rise_index'])))
+        for fall_idx in fall_indices_1:
+            fall = fall_indices[fall_idx]
+            for rise_idx in rise_indices_1:
+                rise = rise_indices[rise_idx]
+                template = df[(df['rise_index'] == rise) & (df['brightness_param'] == param) & (df['fall_index'] == fall)]['SIM_TEMPLATE_INDEX'].values
                 #print(template)
                 if len(template) != 0:
                     #if template[0]<len(templates):
@@ -130,19 +133,19 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
                 else:
                     eff = 0.0
                     
-                im_arr[logmass_index, vk_index] = eff
+                im_arr[rise_idx, fall_idx] = eff
                 
                 
                 if skip_last:
                     if eff < 0.3:
-                        axs[counter].text(vk_index, logmass_index, '%.2f' %eff, ha="center", va="center", color="white", fontsize=16)
+                        axs[counter, 0].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="white", fontsize=16)
                     else:
-                        axs[counter].text(vk_index, logmass_index, '%.2f' %eff, ha="center", va="center", color="black", fontsize=16)
+                        axs[counter, 0].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="black", fontsize=16)
                 else:
                     if eff < 0.3:
-                        axs[counter].text(vk_index, logmass_index, '%.2f' %eff, ha="center", va="center", color="white", fontsize=13)
+                        axs[counter, 0].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="white", fontsize=13)
                     else:
-                        axs[counter].text(vk_index, logmass_index, '%.2f' %eff, ha="center", va="center", color="black", fontsize=13)
+                        axs[counter, 0].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="black", fontsize=13)
 
                 if eff > 0.9:
                     eff_list_1.append(eff)
@@ -151,24 +154,24 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
                 if eff > 0.75:
                     eff_list_2.append(eff)
     
-        axs[counter].imshow(im_arr, vmin=0, vmax=1, cmap='viridis', origin='lower')
+        axs[counter, 0].imshow(im_arr, vmin=0, vmax=1, cmap='viridis', origin='lower')
         
         if counter > 0:
             axs[counter].set_yticklabels([])
             
-        axs[counter].set_xticks(np.arange(len(vks)))
+        axs[counter, 0].set_xticks(np.arange(len(fall_indices)))
         if skip_last:
-            axs[counter].set_xticklabels(['%.2f' %x for x in vks], fontsize=16)
+            axs[counter, 0].set_xticklabels(['%.2f' %x for x in fall_indices], fontsize=16)
         else:
-            axs[counter].set_xticklabels(['%.2f' %x for x in vks], fontsize=12)
+            axs[counter, 0].set_xticklabels(['%.2f' %x for x in fall_indices], fontsize=12)
         
         #axs[counter].set_xlabel('EJECTA VELOCITY\nLOGXLAN = %.0f' %logxlans[counter], fontsize=20)
         if skip_last:
-            axs[counter].set_xlabel('$v_{ej}$ [$c$]', fontsize=20)
-            axs[counter].set_title('$\log (X_{lan})$ = %.0f' %logxlans[counter], fontsize=20)
+            axs[counter, 0].set_xlabel('$fall_index$ [$mags/day$]', fontsize=20)
+            axs[counter, 0].set_title('$brightness_param$ = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=20)
         else:
-            axs[counter].set_xlabel('$v_{ej}$ [$c$]', fontsize=16)
-            axs[counter].set_title('$\log (X_{lan})$ = %.0f' %logxlans[counter], fontsize=16)
+            axs[counter, 0].set_xlabel('$fall_index$ [$mags/day$]', fontsize=16)
+            axs[counter, 0].set_title('$brightness_param$ = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=16)
     
         counter += 1
         
@@ -177,13 +180,14 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
                 break
     
     if skip_last:
-        axs[0].set_ylabel("$M_{ej}$ [$M_\odot$]", fontsize=20)
-        axs[0].set_yticklabels(['%.3f' %10**x for x in logmasses], fontsize=20)
+        axs[0,0].set_ylabel("$rise_index$ [$days$]", fontsize=20)
+        axs[0,0].set_yticklabels(['%.3f' %10**x for x in rise_indices], fontsize=20)
     else:
-        axs[0].set_ylabel("$M_{ej}$ [$M_\odot$]", fontsize=16)
-        axs[0].set_yticklabels(['%.3f' %10**x for x in logmasses], fontsize=16)
-    axs[0].set_yticks(np.arange(len(logmasses)))
+        axs[0,0].set_ylabel("$rise_index$ [$days$]", fontsize=16)
+        axs[0,0].set_yticklabels(['%.3f' %10**x for x in rise_indices], fontsize=16)
+    axs[0,0].set_yticks(np.arange(len(rise_indices)))
     
+    '''
     ## Outline GW170817 components in blue and red
     if GW170817:
         #blue: 0.025 Msun, 0.3c, log X = -4
@@ -196,7 +200,9 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
         logmass_index = np.arange(len(logmasses))[np.where((logmasses >= np.log10(0.04) - 0.01) & (logmasses <= np.log10(0.04) + 0.01))][0]
         logxlan_index = np.arange(len(logxlans))[np.where((logxlans == -2))][0]
         axs[logxlan_index].add_patch(Rectangle((vk_index - 0.5, logmass_index - 0.5), 1, 1, fill=False, edgecolor='red', lw=3))
+    '''
 
+    '''
     ## Color the missing template white and label N/A
     if not skip_last:
         vk_index = np.arange(len(vks))[np.where(vks == 0.3)][0]
@@ -204,7 +210,7 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
         logxlan_index = np.arange(len(logxlans))[np.where((logxlans == -1))][0]
         axs[logxlan_index].add_patch(Rectangle((vk_index - 0.5, logmass_index - 0.5), 1, 1, fill=True, color='white'))
         axs[logxlan_index].text(vk_index, logmass_index, 'N/A', ha="center", va="center", color="black", fontsize=10)
-        
+    ''' 
     fig.tight_layout()
     
     if outfile is not None:
@@ -220,20 +226,20 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
 
 
 # Sanity Checks
-logfile = open("../events/%s/kn_analysis/kn_template_efficiencies.log" %event_name, 'w+')
-lines = ["Tests of KN efficiencies\n\n",
+logfile = open("../events/%s/BBH_analysis/BBH_template_efficiencies.log" %event_name, 'w+')
+lines = ["Tests of BBH efficiencies\n\n",
          "print('Shape = ', df.shape)\n",
          'Shape = %s\n\n' %str(df.shape),
          "len(np.unique(df['SIM_TEMPLATE_INDEX']))\n"
          "%s\n\n" %str(len(np.unique(df['SIM_TEMPLATE_INDEX']))),
          "print(np.unique(df['CUT'], return_counts=True))\n",
          "%s\n\n" %str(np.unique(df['CUT'], return_counts=True)),
-         "np.unique(df['VK'])\n",
-         "%s\n\n" %str(np.unique(df['VK'])),
-         "np.unique(df['LOGXLAN'])\n",
-         "%s\n\n" %str(np.unique(df['LOGXLAN'])),
-         "np.unique(df['LOGMASS'])\n"
-         "%s\n\n" %str(np.unique(df['LOGMASS']))]
+         "np.unique(df['fall_index'])\n",
+         "%s\n\n" %str(np.unique(df['fall_index'])),
+         "np.unique(df['brightness_param'])\n",
+         "%s\n\n" %str(np.unique(df['brightness_param'])),
+         "np.unique(df['rise_index'])\n"
+         "%s\n\n" %str(np.unique(df['rise_index']))]
 logfile.writelines(lines)
 logfile.close()
 
@@ -245,9 +251,9 @@ efficiency_dfs = {'cut_%s' %cut: get_efficiency_df(cut, df) for cut in cuts}
 #print(efficiency_dfs[cut_%s])
 
 for cut in cuts:
-    outfile_trimmed = "../events/%s/kn_analysis/%s_cut_%s_kn_efficiencies_trimmed" %(event_name, event_name, cut)
+    outfile_trimmed = "../events/%s/BBH_analysis/%s_cut_%s_BBH_efficiencies_trimmed" %(event_name, event_name, cut)
     plot_efficiencies(efficiency_dfs['cut_%s' %cut], df, title=None, GW170817=True, outfile=outfile_trimmed, skip_last=False)
 
-    outfile_full = "../events/%s/kn_analysis/%s_cut_%s_kn_efficiencies_full" %(event_name, event_name, cut)
+    outfile_full = "../events/%s/BBH_analysis/%s_cut_%s_BBH_efficiencies_full" %(event_name, event_name, cut)
     plot_efficiencies(efficiency_dfs['cut_%s' %cut], df, title=None, GW170817=True, outfile=outfile_full, skip_last=False)
 
