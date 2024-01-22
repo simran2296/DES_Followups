@@ -92,7 +92,7 @@ GENSIGMA_SEARCH_PEAKMJD:  0.00001     # sigma-smear for SEARCH_PEAKMJD (days)
 GENSOURCE:   RANDOM   
 
 GENFILTERS:  griz
-KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #change from .fits to .fits.gz
+KCOR_FILE:   DES/DES-SN3YR/kcor_DECam.fits.gz #change from .fits to  .fits.gz
 
 RANSEED: 12945       # random number seed
 
