@@ -10,7 +10,7 @@ username = getpass.getuser()
 
 #read kn model info
 info_df = pd.read_csv('../templates/BBH_SED2.INFO', delim_whitespace=True, skiprows=12, 
-                      names=['PARNAMES:', 'SED_FILE', 'SIM_TEMPLATE_INDEX', 'rise_index', 'fall_index', 'brightness_param'])
+                      names=['PARNAMES:', 'SED_FILE', 'SIM_TEMPLATE_INDEX', 'rise_id', 'fall_id', 'brightness_param'])
 
 
 
