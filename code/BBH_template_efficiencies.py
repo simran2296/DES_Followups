@@ -13,7 +13,7 @@ import os
 import matplotlib as mpl
 if os.environ.get('DISPLAY','') == '':
     print('no display found. Using non-interactive Agg backend')
-    mpl.use('Agg')
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 event_name = sys.argv[1]
@@ -63,8 +63,8 @@ def get_efficiency_df(cut, df):
                 z_mean = 99.0
 
             template_info.append([x,
-                                  template_df['rise_index'].values[0],
-                                  template_df['fall_index'].values[0],
+                                  template_df['rise_id'].values[0],
+                                  template_df['fall_id'].values[0],
                                   template_df['brightness_param'].values[0],
                                   eff,
                                   g_mean,
@@ -73,8 +73,8 @@ def get_efficiency_df(cut, df):
                                   z_mean])
         except:
             template_info.append([x, 
-                                  df['rise_index'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
-                                  df['fall_index'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
+                                  df['rise_id'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
+                                  df['fall_id'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
                                   df['brightness_param'].values[df['SIM_TEMPLATE_INDEX'].values == x][0],
                                   0.0, 
                                   99.0,
@@ -107,22 +107,22 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
     #logmasses, logmasses_counts = np.unique(df['LOGM'], return_counts=True)
     #logxlans, logxlans_counts = np.unique(df['LOGXLAN'], return_counts=True)
     #vks, vk_counts = np.unique(df['VK'], return_counts=True)
-    rise_indices, rise_indices_counts = np.unique(df['rise_index'], return_counts=True)
-    fall_indices, fall_indices_counts = np.unique(df['fall_index'], return_counts=True)
+    rise_indices, rise_indices_counts = np.unique(df['rise_id'], return_counts=True)
+    fall_indices, fall_indices_counts = np.unique(df['fall_id'], return_counts=True)
     brightness_params, brightness_params_counts = np.unique(df['brightness_param'], return_counts=True)
 
     counter = 0
     for param in np.unique(df['brightness_param']):
         
-        im_arr = np.ones((len(np.unique(df['rise_index'])), len(np.unique(df['fall_index']))))
+        im_arr = np.ones((len(np.unique(df['rise_id'])), len(np.unique(df['fall_id']))))
         #im_arr = np.ones((len(np.unique(df['VK'])), len(np.unique(df['LOGMASS']))))
-        fall_indices_1 = np.arange(len(np.unique(df['fall_index'])))
-        rise_indices_1 = np.arange(len(np.unique(df['rise_index'])))
+        fall_indices_1 = np.arange(len(np.unique(df['fall_id'])))
+        rise_indices_1 = np.arange(len(np.unique(df['rise_id'])))
         for fall_idx in fall_indices_1:
             fall = fall_indices[fall_idx]
             for rise_idx in rise_indices_1:
                 rise = rise_indices[rise_idx]
-                template = df[(df['rise_index'] == rise) & (df['brightness_param'] == param) & (df['fall_index'] == fall)]['SIM_TEMPLATE_INDEX'].values
+                template = df[(df['rise_id'] == rise) & (df['brightness_param'] == param) & (df['fall_id'] == fall)]['SIM_TEMPLATE_INDEX'].values
                 #print(template)
                 if len(template) != 0:
                     #if template[0]<len(templates):
@@ -232,12 +232,12 @@ lines = ["Tests of BBH efficiencies\n\n",
          "%s\n\n" %str(len(np.unique(df['SIM_TEMPLATE_INDEX']))),
          "print(np.unique(df['CUT'], return_counts=True))\n",
          "%s\n\n" %str(np.unique(df['CUT'], return_counts=True)),
-         "np.unique(df['fall_index'])\n",
-         "%s\n\n" %str(np.unique(df['fall_index'])),
+         "np.unique(df['fall_id'])\n",
+         "%s\n\n" %str(np.unique(df['fall_id'])),
          "np.unique(df['brightness_param'])\n",
          "%s\n\n" %str(np.unique(df['brightness_param'])),
-         "np.unique(df['rise_index'])\n"
-         "%s\n\n" %str(np.unique(df['rise_index']))]
+         "np.unique(df['rise_id'])\n"
+         "%s\n\n" %str(np.unique(df['rise_id']))]
 logfile.writelines(lines)
 logfile.close()
 
