@@ -66,7 +66,7 @@ while running:
             progress_dict[obj] = 'Done!'
 
     #write progress to screen
-    string_output = ['%s -- %s' %(k, v) for k, v in progress_dict.iteritems()]
+    string_output = ['%s -- %s' %(k, v) for k, v in progress_dict.items()]
     progress_out = 'Processing:  ' + ' | '.join(string_output) + ' |' + ' ' * 30
     sys.stdout.write('\r' + progress_out)
     sys.stdout.flush()

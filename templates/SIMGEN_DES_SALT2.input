@@ -6,8 +6,8 @@
 # Event-specific info to be overwritten
 #--------------------------------------------------------------------
 
-GENRANGE_PEAKMJD: 58598 58628
-GENRANGE_MJD: 58598 58628
+GENRANGE_PEAKMJD: 58598 59000
+GENRANGE_MJD: 58598 59000
 GENVERSION:  RM_Net_AGN
 SOLID_ANGLE:  0.0082
 NGEN_LC:  10

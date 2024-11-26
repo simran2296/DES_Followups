@@ -46,7 +46,7 @@ objs = ['AGN', 'KN', 'CC', 'Ia', 'CaRT', 'ILOT', 'Mdwarf', 'SN91bg', 'Iax', 'PIa
 # Add trigger files
 boosts = {x[7:]: df[x].values[0] for x in df.columns if x.find('BOOST') != -1}
 trigger_files, trigger_objs = [], []
-for k, v in boosts.iteritems():
+for k, v in boosts.items():
     if k.find('-tr') != -1:
         trigger_files.append(file_list[objs.index(k[0:-3])])
         trigger_objs.append(k)

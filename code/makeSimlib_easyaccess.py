@@ -130,7 +130,7 @@ for key, (ra_min, ra_max, dec_min, dec_max) in bounds.items():
 
 # weight of each field (percentage of total area)
 totarea = sum(areas.values())
-weights = dict((key, val / totarea) for key, val in areas.iteritems())
+weights = dict((key, val / totarea) for key, val in areas.items())
 
 # "cdf" of field weights
 cdf = []
@@ -192,8 +192,10 @@ def main():
     cursor = conn.cursor() # create a cursor object to handle db
     
     fname = options.outfile
+    print('options:', options)
+    print('outfile:', options.outfile)
     if fname is None:
-        print "must specify output file."
+        print("must specify output file.")
         exit()
     out = open(fname, 'w+')
     out.write(master_head_template.format(cmd))
@@ -246,19 +248,19 @@ def main():
     ORDER BY
         field, oi.ccdnum, oi.nite, oi.band
     """.format(q_zp,expnumstr)
-    print expnumstr
-    print query
+    print(expnumstr)
+    print(query)
     # Run the query or load pre-saved results.
     if os.path.exists(cache_filename):
-        print "Loading from {0}...".format(cache_filename)
+        print("Loading from {0}...".format(cache_filename))
         data = np.load(cache_filename)
     else:
-        print "Querying database (this may take a minute or two)..."
+        print("Querying database (this may take a minute or two)...")
         t0 = time.time()
         QQ = cursor.execute(query) # execute query
         QQ.description
         header = [item[0] for item in cursor.description]
-        print header
+        print(header)
         rows = cursor.fetchall()
         # figure out dtypes for our array so we can reference names:
         dtype = []
@@ -266,19 +268,19 @@ def main():
             if (head in ['CCDNUM','NITE','EXPNUM']):
                 dtype.append((head.lower(),int))
             elif (head in ['BAND','FIELD']):
-                dtype.append((head.lower(),"S10"))
+                dtype.append((head.lower(),"U10"))   ## S10 was giving b'Field_name' and b'filter_name' so replaced it by U10 (Simran, Nov 25, 2024)
             else:
                 dtype.append((head.lower(),float))
         data = np.array(rows,dtype=dtype)
-        print data['field']
-        print data['band']
-        print "Query took {0:.2f} seconds, {1:.2f} MB array.".format(
-            time.time() - t0, data.nbytes / 1.e6)
+        print(data['field'])
+        print(data['band'])
+        print("Query took {0:.2f} seconds, {1:.2f} MB array.".format(
+            time.time() - t0, data.nbytes / 1.e6))
         if options.cache:
-            print "Saving to {0}...".format(cache_filename)
+            print("Saving to {0}...".format(cache_filename))
             np.save(cache_filename, data)
     msg = "{0:d} records".format(len(data))
-    print msg
+    print(msg)
     out.write('#{0}\n'.format(msg))
 
     #-------------------------------------------------------------------------
@@ -290,7 +292,7 @@ def main():
     data = data[mask]
     msg = ("HACK: {0:d} records after trimming entries with PSF_NEA < 0"
            .format(len(data)))
-    print msg
+    print(msg)
     out.write('#{0}\n'.format(msg))
 
     # Hack to cut crazy zeropoint RMS values, including nan
@@ -298,7 +300,7 @@ def main():
     data = data[mask]
     msg = ("HACK: {0:d} records after trimming entries with "
            "CHIP_ZERO_POINT_RMS > 0.5".format(len(data)))
-    print msg
+    print(msg)
     out.write('#{0}\n'.format(msg))
 
     # END HACKS
@@ -307,12 +309,12 @@ def main():
     # If input file is defined, read positions.
     if options.infile is not None:
         msg = "Reading positions from {0}".format(options.infile)
-        print msg
+        print(msg)
         positions = []
         with open(options.infile, 'r') as f:
             keys = f.readline().upper().strip().split(',')
             if ('RA' not in keys) or ('DEC' not in keys):
-                print "RA and DEC must appear in first line of infile"
+                print("RA and DEC must appear in first line of infile")
                 exit(1)
             for line in f:
                 positions.append(odict(zip(keys, line.strip().split(','))))
@@ -329,7 +331,7 @@ def main():
     # Otherwise, report area from which positions will be selected.
     else:
         msg = "Randomly selecting position from fields:"
-        print msg
+        print(msg)
         out.write('#{0}\n'.format(msg))
         for name in areas.keys():
             msg = ("    {0}: RA=[{1:5.1f},{2:5.1f}] Dec=[{3:5.1f},{4:5.1f}] "
@@ -341,7 +343,7 @@ def main():
                            bounds[name][3],
                            areas[name],
                            weights[name]))
-            print msg
+            print(msg)
             out.write('#{0}\n'.format(msg))
         ntarget = options.n
 
@@ -379,7 +381,7 @@ def main():
                                            0., 0.27))
 
             # Write extra keys
-            for key, val in extrakeys.iteritems():
+            for key, val in extrakeys.items():
                 out.write('{}: {}\n'.format(key, val))
 
             # Get unique fields
@@ -441,21 +443,21 @@ def main():
 
             out.write('END_LIBID: {0:d}\n'.format(ngood))
 
-        print '\r{0:<5d} on images / {1:<5d} placed'.format(ngood, ntot),
+        print('\r{0:<5d} on images / {1:<5d} placed'.format(ngood, ntot), end=" ") 
         sys.stdout.flush()
 
     out.write("END_OF_SIMLIB:\n")
 
-    print "\n{0:<5d} on overlapping fields".format(noverlap)
+    print("\n{0:<5d} on overlapping fields".format(noverlap))
 
     # Effective area. Only calculated if positions were seleceted randomly.
     if options.infile is None:
         effective_area = totarea * float(ngood)/ntot
-        print "Effective area: {0:.4f} deg^2".format(effective_area)
+        print("Effective area: {0:.4f} deg^2".format(effective_area))
         out.write('EFFECTIVE_AREA: {0:.4f}\n'.format(effective_area))
 
     out.close()
-    print "Wrote to:", fname
+    print("Wrote to:", fname)
 
 if __name__ == '__main__':
     main()
