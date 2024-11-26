@@ -7,7 +7,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 def convert_to_z(d, cosmo):
-    return z_at_value(cosmo.luminosity_distance, d * u.Mpc)
+    return z_at_value(cosmo.luminosity_distance, d * u.Mpc, method='bounded')
 
 def double_poly_fit(x, b0, b1, b2, b3, c0, c1, c2, c3):
     return (b0 + b1*x + b2*x**2 + b3*x**3) * (c0 + c1*x + c2*x**2 + c3*x**3)

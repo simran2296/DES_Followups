@@ -130,5 +130,6 @@ if trim_libids_by_nobs:
 # Write output SIMLIB file
 outfile = open(outfile_name, 'w+')
 for line in outlines:
-    print >>outfile, line, 
+    print(line, file=outfile)
+    #print >>outfile, line, #this was python2
 outfile.close()

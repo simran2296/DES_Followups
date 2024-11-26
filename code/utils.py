@@ -15,11 +15,11 @@ def get_ligo_z_range(dist, sigma):
     
     #calculate z range
     min_dist = (dist - sigma) * u.Mpc
-    min_z = z_at_value(cosmo.luminosity_distance, min_dist)
+    min_z = z_at_value(cosmo.luminosity_distance, min_dist, method='bounded')
     max_dist = (dist + sigma) * u.Mpc
-    max_z = z_at_value(cosmo.luminosity_distance, max_dist)
+    max_z = z_at_value(cosmo.luminosity_distance, max_dist, method='bounded')
 
-    return round(min_z, 3), round(max_z, 3)
+    return round(min_z.value, 3), round(max_z.value, 3)
 
 
 def MAGLIMIT_calculator(ZPT, PSF, SKYMAG, SNR):
