@@ -15,7 +15,7 @@ transient_class = fits_dir_prefix.split('_')[-1]
 # place cuts
 if not os.path.exists('../events/%s/cut_results/%s_cut_results.npy'  %(event_name, fits_dir_prefix)):
     os.system('python place_cuts.py %s %s' %(event_name, fits_dir_prefix))
-cut_results = np.load('../events/%s/cut_results/%s_cut_results.npy' %(event_name, fits_dir_prefix)).item()
+cut_results = np.load('../events/%s/cut_results/%s_cut_results.npy' %(event_name, fits_dir_prefix), allow_pickle=True).item()
 
 
 # build up cut summary table and candidate table
@@ -30,7 +30,7 @@ cut_by_dict = { str(x) : 0 for x in cut_df['NUMBER'].values }
 
 table_output = []
 table_output_columns = ['SNID', 'RA', 'DEC'] #more can be added later
-for snid, info in cut_results.iteritems():
+for snid, info in cut_results.items():
     
     cut_by = str(info['cut'])
     

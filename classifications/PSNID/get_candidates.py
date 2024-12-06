@@ -22,7 +22,7 @@ import pandas as pd
 print("Loading cut results")
 d = np.load('../../events/%s/cut_results/LightCurvesReal_cut_results.npy' %event_name).item()
 snids = []
-for snid, info in d.iteritems():
+for snid, info in d.items():
     cutnum = int(info['cut'])
     if cutnum > cutoff or cutnum < 0:
         snids.append(snid)

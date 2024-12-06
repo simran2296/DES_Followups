@@ -16,7 +16,9 @@ NGEN_LC:  100
 # Don't need to change anything after this point  (I sure hope)
 #--------------------------------------------------------------------
 
-SIMLIB_FILE:  sim_gen/SIMLIB.txt
+#SIMLIB_FILE:  sim_gen/SIMLIB.txt
+SIMLIB_FILE:  SIMLIB.txt
+
 
 
 # Pair-Instability SN model (from MOSFIT group)
@@ -62,8 +64,10 @@ SMEARFLAG_ZEROPT:  1  # smear zero-point with zptsig
 
 NEWMJD_DIF:  0.7
 APPLY_SEARCHEFF_OPT:  0
-SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
-SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
+#SEARCHEFF_PIPELINE_FILE:  sim_gen/MYSEARCH_EFF.DAT
+#SEARCHEFF_PIPELINE_LOGIC_FILE:  sim_gen/SEARCHEFF_PIPELINE_LOGIC.DAT
+SEARCHEFF_PIPELINE_FILE:  MYSEARCH_EFF.DAT
+SEARCHEFF_PIPELINE_LOGIC_FILE:  SEARCHEFF_PIPELINE_LOGIC.DAT
 
 APPLY_CUTWIN_OPT: 1   #PSNID dies if you turn this off, fun fact
 #CUTWIN_SNRMAX:   3 griz 1 -20. 60.  # require 1 of griz with S/N > 3

@@ -23,7 +23,7 @@ id_num, id_map = 10000, {}
 
 counter, total = 0.0, float(len(list(real_datasets.keys())))
 # Begin classifications
-for code, test_df in real_datasets.iteritems():
+for code, test_df in real_datasets.items():
     # Track progress
     counter += 1.0
     progress = counter / total * 100

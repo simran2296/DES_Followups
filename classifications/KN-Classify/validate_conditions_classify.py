@@ -37,7 +37,7 @@ for index, row in df.iterrows():
 
 
 # reverse the dictionary for quick lookup
-index_dict = {'%.2f_%.2f_%.2f' %(float(info['SEEING']), float(info['SKYMAG']), float(info['DELTAT'])): index for index, info in condition_dict.iteritems()}
+index_dict = {'%.2f_%.2f_%.2f' %(float(info['SEEING']), float(info['SKYMAG']), float(info['DELTAT'])): index for index, info in condition_dict.items()}
 
 
 #####
@@ -80,7 +80,7 @@ def run_seeing(mode, fixed_seeing, fixed_skymag, fixed_deltat, event_name=event_
         
         total = len(list(training_set.keys()))
         counter = 0
-        for code, train_df in training_set.iteritems():
+        for code, train_df in training_set.items():
             #Track progress
             counter += 1
             sys.stdout.write('\rClassifying  %i / %i     ' %(counter, total))
@@ -171,7 +171,7 @@ def run_skymag(mode, fixed_seeing, fixed_skymag, fixed_deltat, event_name=event_
         
         total = len(list(training_set.keys()))
         counter = 0
-        for code, train_df in training_set.iteritems():
+        for code, train_df in training_set.items():
             #Track progress
             counter += 1
             sys.stdout.write('\rClassifying  %i / %i     ' %(counter, total))
