@@ -61,7 +61,7 @@ def calc_expected_agn_using_mag_eff(event_info, eff_area, cut_results, flt, cut)
     ##extract peakmag
     cut_peak_mags = []
     total_peak_mags = []
-    for snid, info in cut_results.iteritems():
+    for snid, info in cut_results.items():
         fluxes = info['lightcurve'][info['lightcurve']['FLT'] == flt]['FLUXCAL'].values
         if len(fluxes) != 0:
             max_flux = np.max([float(x) for x in fluxes])

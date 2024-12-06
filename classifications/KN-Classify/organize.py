@@ -27,7 +27,7 @@ def breakup(df):
             groups[br] = [r.values]
             bad_cols[br] = [x for x in df.columns if br[list(df.columns).index(x)] == 'T']
             
-    datasets = {k: pd.DataFrame(data=v, columns=df.columns).drop(labels=bad_cols[k], axis=1) for k, v in groups.iteritems()}
+    datasets = {k: pd.DataFrame(data=v, columns=df.columns).drop(labels=bad_cols[k], axis=1) for k, v in groups.items()}
 
     return datasets
 

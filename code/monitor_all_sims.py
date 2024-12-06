@@ -1717,7 +1717,7 @@ sys.stdout.flush()
 #output a list of all sims that finished successfully
 good_sims = []
 try:
-    for k, v in name_map.iteritems():
+    for k, v in name_map.items():
         if v != 'ERROR':
             good_sims.append(k)
 except:

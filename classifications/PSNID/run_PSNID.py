@@ -27,7 +27,7 @@ modes[signal] = {'filename': 'psnid_%s.nml' %signal, 'version': 'VERSION: %s_DES
 for obj in background.split(','):
     modes[obj] = {'filename': 'psnid_%s.nml' %obj, 'version':'VERSION: %s_DESGW_%s_%s' %(username, event_name, obj), 'list': "   SNCID_LIST_FILE = 'good_snids_%s.txt'" %obj}
 
-for obj, mode in modes.iteritems():
+for obj, mode in modes.items():
     stream = open('template_psnid.nml', 'r')
     lines = stream.readlines()
     stream.close()
@@ -62,7 +62,7 @@ for obj in sim_include.split(','):
     print(obj)
     good_snids = []
     d = np.load('../../events/%s/cut_results/%s_DESGW_%s_%s_cut_results.npy' %(event_name, username, event_name, obj)).item()
-    for snid, info in d.iteritems():
+    for snid, info in d.items():
         if int(info['cut']) > cutoff or int(info['cut']) == -1:
             good_snids.append(int(snid))
 
@@ -85,7 +85,7 @@ os.system('python get_candidates.py %s %i' %(event_name, cutoff))
 
 
 #run psnid
-for obj, mode in modes.iteritems():
+for obj, mode in modes.items():
     os.system('split_and_fit.pl %s' %mode['filename'])
     print("Running PSNID on %s. Started at %s" %(obj, datetime.datetime.now().strftime('%H:%M')))
 

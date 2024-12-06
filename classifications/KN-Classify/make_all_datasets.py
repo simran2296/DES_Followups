@@ -39,14 +39,14 @@ datasets = {obj: np.load('../../events/%s/KNC/%s_datasets.npy' %(event_name, obj
 sys.stdout.write('\rExtracting: Done!  --  Reading Features: Done!  --  Organizing Datasets: Waiting')
 sys.stdout.flush()
 grouped_datasets = {}
-for obj, dataset in datasets.iteritems():
-    for label, df in dataset.iteritems():
+for obj, dataset in datasets.items():
+    for label, df in dataset.items():
         if label in grouped_datasets.keys():
             grouped_datasets[label].append(df)
         else:
             grouped_datasets[label] = [df]
 
-merged_datasets = {label: pd.concat(data) for label, data in grouped_datasets.iteritems()}
+merged_datasets = {label: pd.concat(data) for label, data in grouped_datasets.items()}
 np.save('../../events/%s/KNC/training_data.npy' %event_name, merged_datasets)
 
 # finish

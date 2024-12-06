@@ -45,7 +45,7 @@ def extract_all_to_csv(cut_res, obj, outfile, cut_requirement=-1):
     #counter = 0.0
 
     data = []
-    for snid, info in cut_res.iteritems():
+    for snid, info in cut_res.items():
         
         #output progress
         #counter += 1

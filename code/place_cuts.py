@@ -40,7 +40,7 @@ if len(undefined_cuts) != 0:
     sys.exit()
 
 #load light curve dictionary
-data_dict = np.load('../events/%s/sims_and_data/%s_PYTHON/%s.npy' %(event_name, fits_dir_prefix, fits_dir_prefix)).item()
+data_dict = np.load('../events/%s/sims_and_data/%s_PYTHON/%s.npy' %(event_name, fits_dir_prefix, fits_dir_prefix), allow_pickle=True).item()
 # change the 
 #data_dict = data_dict.rename(columns={'BAND': 'FLT'})
 #dfnew = df.rename(columns={'popu': 'population'})
@@ -65,7 +65,7 @@ compiled_cut_code_block = compile(cut_code_block, '<string>', 'exec')
 
 #place cuts by applying cut_code_block to each light curve
 cut_results = {}
-for snid, info in data_dict.iteritems():
+for snid, info in data_dict.items():
     
     lc = info['lightcurve']
     #print(info)

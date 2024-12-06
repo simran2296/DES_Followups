@@ -147,7 +147,7 @@ def classify(train_df, test_dfs, test_df_outfiles, report_files, n_jobs=-1, outp
 
     # Choose best feature selection method
     best_score = 0.0
-    for m, info in feature_dict.iteritems():
+    for m, info in feature_dict.items():
         if info['SCORE'] > best_score:
             method = m
             feats = info['FEATURES']
@@ -217,7 +217,7 @@ def write_output(features, feature_importances, best_params, feature_dict, auc, 
     for feat, imp in zip(features, feature_importances):
         outlines.append("F:\t%.5f\t%s" %(imp, feat))
     outlines.append('\nFeature Optimization:')
-    for method, info in feature_dict.iteritems():
+    for method, info in feature_dict.items():
         outlines.append("M_START: %i" %method)
         outlines.append("\tCUTOFF: %.5f" %info['CUTOFF'])
         outlines.append("\tFEATURES:")
@@ -226,7 +226,7 @@ def write_output(features, feature_importances, best_params, feature_dict, auc, 
         outlines.append("\tSCORE: %.5f" %info['SCORE'])
         outlines.append("M_END: %i\n" %method)
     outlines.append('\nValidated Classifier Parameters:')
-    for param, value in best_params.iteritems():
+    for param, value in best_params.items():
         outlines.append("P:\t%s: %s" %(param, value))
     outlines.append('\nFinal Test Set AUC: %s' %auc)
     outlines.append('\nFinal Test Set Outfile: %s\n' %test_df_outfile)

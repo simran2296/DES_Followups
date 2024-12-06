@@ -46,7 +46,7 @@ for res, label  in zip(results, labels):
 
     out_data = []
 
-    for snid, info in res.iteritems():
+    for snid, info in res.items():
 
         counter += 1.0
         if int(counter) % 100 == 0:

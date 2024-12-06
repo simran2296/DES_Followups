@@ -30,9 +30,9 @@ except:
 def get_efficiency_df(cut, df):
     
     cuts, counts = np.unique(df['CUT'], return_counts=True)
-    print(cuts, counts)
+    #print(cuts, counts)
     templates, totals = np.unique(df['SIM_TEMPLATE_INDEX'], return_counts=True)
-    print(len(templates), templates, totals)
+    #print(len(templates), templates, totals)
     
 
     cut_df = df.iloc[np.where((df['CUT'].values > cut) | (df['CUT'].values == -1))]
@@ -82,7 +82,7 @@ def get_efficiency_df(cut, df):
                                   99.0,
                                   99.0])
 
-    template_info_cols = ['SNANA_INDEX', 'rise_index', 'fall_index', 'brightness_param', 'EFFICIENCY', 'PEAKMAG_g', 'PEAKMAG_r', 'PEAKMAG_i', 'PEAKMAG_z']
+    template_info_cols = ['SNANA_INDEX', 'rise_id', 'fall_id', 'brightness_param', 'EFFICIENCY', 'PEAKMAG_g', 'PEAKMAG_r', 'PEAKMAG_i', 'PEAKMAG_z']
     output_df = pd.DataFrame(data=template_info, columns=template_info_cols)
     output_df.to_csv("../events/%s/BBH_analysis/%s_cut_%s_BBH_efficiencies_table.csv" %(event_name, event_name, cut))
     
@@ -99,7 +99,10 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
     if skip_last:
         fig, axs = plt.subplots(1, len(np.unique(df['brightness_param'])) - 1, figsize=(18, 7.5), dpi=120, squeeze=False)
     else:
-        fig, axs = plt.subplots(1, len(np.unique(df['brightness_param'])), figsize=(18, 7.5), dpi=120, squeeze=False)
+        #fig, axs = plt.subplots(1, len(np.unique(df['brightness_param'])), figsize=(18, 7.5), dpi=120, squeeze=False)
+        fig, axs = plt.subplots(1, 1, figsize=(18, 7.5), dpi=120, squeeze=False)
+
+    print(axs)
     
     if title is not None:
         fig.suptitle(title, fontsize=28)
@@ -111,65 +114,76 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
     fall_indices, fall_indices_counts = np.unique(df['fall_id'], return_counts=True)
     brightness_params, brightness_params_counts = np.unique(df['brightness_param'], return_counts=True)
 
+    #print(rise_indices, rise_indices_counts)
+    #print(fall_indices, fall_indices_counts)
+    #print(brightness_params, brightness_params_counts)
+
+    print(np.unique(df['brightness_param']))
+    print(np.size(np.unique(df['brightness_param'])))
+
     counter = 0
     for param in np.unique(df['brightness_param']):
-        
-        im_arr = np.ones((len(np.unique(df['rise_id'])), len(np.unique(df['fall_id']))))
-        #im_arr = np.ones((len(np.unique(df['VK'])), len(np.unique(df['LOGMASS']))))
-        fall_indices_1 = np.arange(len(np.unique(df['fall_id'])))
-        rise_indices_1 = np.arange(len(np.unique(df['rise_id'])))
-        for fall_idx in fall_indices_1:
-            fall = fall_indices[fall_idx]
-            for rise_idx in rise_indices_1:
-                rise = rise_indices[rise_idx]
-                template = df[(df['rise_id'] == rise) & (df['brightness_param'] == param) & (df['fall_id'] == fall)]['SIM_TEMPLATE_INDEX'].values
-                #print(template)
-                if len(template) != 0:
-                    #if template[0]<len(templates):
-                    eff = effs[template[0] - 1]
-                    #print(eff)#eff = effs[np.unique(template) - 1]
-                else:
-                    eff = 0.0
+
+        if param == 2.45300000*10**37:
+            
+            im_arr = np.ones((len(np.unique(df['rise_id'])), len(np.unique(df['fall_id']))))
+            #im_arr = np.ones((len(np.unique(df['VK'])), len(np.unique(df['LOGMASS']))))
+            fall_indices_1 = np.arange(len(np.unique(df['fall_id'])))
+            rise_indices_1 = np.arange(len(np.unique(df['rise_id'])))
+            for fall_idx in fall_indices_1:
+                fall = fall_indices[fall_idx]
+                for rise_idx in rise_indices_1:
+                    rise = rise_indices[rise_idx]
+                    template = df[(df['rise_id'] == rise) & (df['brightness_param'] == param) & (df['fall_id'] == fall)]['SIM_TEMPLATE_INDEX'].values
+                    #print(template)
+                    #print(len(template))
+                    if len(template) != 0:
+                        #if template[0]<len(templates):
+                        eff = effs[template[0] - 1]
+                        #print(eff)#eff = effs[np.unique(template) - 1]
+                    else:
+                        eff = 0.0
+                        
+                    im_arr[rise_idx, fall_idx] = eff
+                    #print(im_arr)
                     
-                im_arr[rise_idx, fall_idx] = eff
-                
-                
-                if skip_last:
-                    if eff < 0.3:
-                        axs[counter, 0].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="white", fontsize=16)
+                    '''
+                    if skip_last:
+                        if eff < 0.3:
+                            axs[counter].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="white", fontsize=16)
+                        else:
+                            axs[counter].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="black", fontsize=16)
                     else:
-                        axs[counter, 0].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="black", fontsize=16)
-                else:
-                    if eff < 0.3:
-                        axs[counter, 0].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="white", fontsize=13)
-                    else:
-                        axs[counter, 0].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="black", fontsize=13)
+                        if eff < 0.3:
+                            axs[counter].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="white", fontsize=13)
+                        else:
+                            axs[counter].text(fall_idx, rise_idx, '%.2f' %eff, ha="center", va="center", color="black", fontsize=13)
+                    '''
+                    if eff > 0.9:
+                        eff_list_1.append(eff)
+                        #print(eff)
 
-                if eff > 0.9:
-                    eff_list_1.append(eff)
-                    #print(eff)
-
-                if eff > 0.75:
-                    eff_list_2.append(eff)
-    
-        axs[counter, 0].imshow(im_arr, vmin=0, vmax=1, cmap='viridis', origin='lower')
+                    if eff > 0.75:
+                        eff_list_2.append(eff)
+        
+        axs[0,counter].imshow(im_arr, vmin=0, vmax=1, cmap='viridis', origin='lower')
         
         if counter > 0:
-            axs[counter].set_yticklabels([])
+            axs[0,counter].set_yticklabels([])
             
-        axs[counter, 0].set_xticks(np.arange(len(fall_indices)))
+        axs[0,counter].set_xticks(np.arange(len(fall_indices)))
         if skip_last:
-            axs[counter, 0].set_xticklabels(['%.2f' %x for x in fall_indices], fontsize=16)
+            axs[0,counter].set_xticklabels(['%.2f' %x for x in fall_indices], fontsize=16)
         else:
-            axs[counter, 0].set_xticklabels(['%.2f' %x for x in fall_indices], fontsize=12)
+            axs[0,counter].set_xticklabels(['%.2f' %x for x in fall_indices], fontsize=12)
         
         #axs[counter].set_xlabel('EJECTA VELOCITY\nLOGXLAN = %.0f' %logxlans[counter], fontsize=20)
         if skip_last:
-            axs[counter, 0].set_xlabel('fall_index [$mags/day$]', fontsize=20)
-            axs[counter, 0].set_title('brightness_param = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=20)
+            axs[0,counter].set_xlabel('fall_id [$mags/day$]', fontsize=20)
+            axs[0,counter].set_title('brightness_param = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=20)
         else:
-            axs[counter, 0].set_xlabel('fall_index [$mags/day$]', fontsize=16)
-            axs[counter, 0].set_title('brightness_param = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=16)
+            axs[0,counter].set_xlabel('fall_id [$mags/day$]', fontsize=16)
+            axs[0,counter].set_title('brightness_param = %.0f [$ergs/cm^2/s$]' %brightness_params[counter], fontsize=16)
     
         counter += 1
         
@@ -178,10 +192,10 @@ def plot_efficiencies(effs, df, title=None, GW170817=True, outfile=None, skip_la
                 break
     
     if skip_last:
-        axs[0,0].set_ylabel("rise_index [$days$]", fontsize=20)
+        axs[0,0].set_ylabel("rise_id [$days$]", fontsize=20)
         axs[0,0].set_yticklabels(['%.3f' %10**x for x in rise_indices], fontsize=20)
     else:
-        axs[0,0].set_ylabel("rise_index [$days$]", fontsize=16)
+        axs[0,0].set_ylabel("rise_id [$days$]", fontsize=16)
         axs[0,0].set_yticklabels(['%.3f' %10**x for x in rise_indices], fontsize=16)
     axs[0,0].set_yticks(np.arange(len(rise_indices)))
     
@@ -243,7 +257,7 @@ logfile.close()
 
 # MAIN BODY
 cuts = [x for x in np.unique(df['CUT'].values) if int(x) != -1]
-cuts += [10 + np.max(cuts)]
+#cuts += [10 + np.max(cuts)]
 
 efficiency_dfs = {'cut_%s' %cut: get_efficiency_df(cut, df) for cut in cuts}
 #print(efficiency_dfs[cut_%s])
